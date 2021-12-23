@@ -11,6 +11,7 @@ import (
 type testType struct {
 	Name	string
 	W, X, Y, Z	uint8
+	Tag [16777216]bool
 }
 
 func main() {
@@ -19,7 +20,8 @@ func main() {
 	enc := gob.NewEncoder(&network) // writes to network
 	dec := gob.NewDecoder(&network) // reads from network
 
-	err := enc.Encode(testType{"test", 1, 2, 3, 4});
+	var a [16777216]bool;
+	err := enc.Encode(testType{"test", 1, 2, 3, 4, a});
 	if err != nil {
 		log.Fatal("encode error:", err);
 	}
@@ -58,7 +60,7 @@ func main() {
 
 	file.Close();
 
-	fmt.Println(get);
+	//fmt.Println(get);
 
 	// testing lrng8()
 	lrng8();
