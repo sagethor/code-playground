@@ -62,17 +62,13 @@ func vuBounds(v uint8, u uint8) boundType {
 	}
 }
 
-// rewrite for simplicity (none of this boolean shit)
 func vplusWalk(w uint8) uint8 {
 	switch wBounds(w) {
-	case xminusEdge, zxCorner:
+	case xminusEdge, zxCorner, yxCorner:
 		// advance one zone in the -x direction, calculate new coordinate - custom w code?
 
 	case yplusEdge, yzCorner:
 		// advance one zone in the +y direction, calculate new coordinate - custom w code?
-
-	case yxCorner:
-		// interesting "corner" case, need to come to design decision.
 
 	case offGrid:
 		// do nothing - player will need to file bug report?
@@ -83,14 +79,11 @@ func vplusWalk(w uint8) uint8 {
 }
 func vminusWalk(w uint8) uint8 {
 	switch wBounds(w) {
-	case xplusEdge, xzCorner:
+	case xplusEdge, xzCorner, xyCorner:
 		// advance one zone in the +x direction, calculate new coordinate - custom w code?
 
 	case yminusEdge, zyCorner:
 		// advance one zone in the -y direction, calculate new coordinate - custom w code?
-
-	case xyCorner:
-		// interesting "corner" case, need to come to design decision.
 
 	case offGrid:
 		// do nothing - player will need to file bug report?
@@ -101,14 +94,11 @@ func vminusWalk(w uint8) uint8 {
 }
 func uplusWalk(w uint8) uint8 {
 	switch wBounds(w) {
-	case yplusEdge, yxCorner:
+	case yplusEdge, yxCorner, yzCorner:
 		// advance one zone in the +y direction, calculate new coordinate - custom w code?
 
 	case zminusEdge, xzCorner:
 		// advance one zone in the -z direction, calculate new coordinate - custom w code?
-
-	case yzCorner:
-		// interesting "corner" case, need to come to design decision.
 
 	case offGrid:
 		// do nothing - player will need to file bug report?
@@ -119,14 +109,11 @@ func uplusWalk(w uint8) uint8 {
 }
 func uminusWalk(w uint8) uint8 {
 	switch wBounds(w) {
-	case yminusEdge, xyCorner:
+	case yminusEdge, xyCorner, zyCorner:
 		// advance one zone in the -y direction, calculate new coordinate - custom w code?
 
 	case zplusEdge, zxCorner:
 		// advance one zone in the +z direction, calculate new coordinate - custom w code?
-
-	case zyCorner:
-		// interesting "corner" case, need to come to design decision.
 
 	case offGrid:
 		// do nothing - player will need to file bug report?
@@ -137,14 +124,11 @@ func uminusWalk(w uint8) uint8 {
 }
 func vuplusWalk(w uint8) uint8 {
 	swtich wBounds(w) {
-	case zplusEdge, zyCorner:
+	case zplusEdge, zyCorner, zxCorner:
 		// advance one zone in the +z direction, calculate new coordinate - custom w code?
 
 	case xminusEdge, yxCorner:
 		// advance one zone in the -x direction, calculate new coordinate - custom w code?
-
-	case zxCorner:
-		// interesting "corner" case, need to come to design decision.
 
 	case offGrid:
 		// do nothing - player will need to file bug report?
@@ -155,14 +139,11 @@ func vuplusWalk(w uint8) uint8 {
 }
 func vuminusWalk(w uint8) uint8 {
 	switch wBounds(w) {
-	case zminusEdge, yzCorner:
+	case zminusEdge, yzCorner, xzCorner:
 		// advance one zone in the -z direction, calculate new coordinate - custom w code?
 
 	case xplusEdge, xyCorner:
 		// advance one zone in the +x direction, calculate new coordinate - custom w code?
-
-	case xzCorner:
-		// interesting "corner" case, need to come to design decision.
 
 	case offGrid:
 		// do nothing - player will need to file bug report?
