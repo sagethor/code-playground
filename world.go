@@ -31,7 +31,7 @@ func wBounds(w uint8) boundType {
 }
 func vuBounds(v uint8, u uint8) boundType {
 	switch {
-	case v+u < 6, v+u > 22:
+	case v+u < 6, v+u > 22, v > 14, u > 14:
 		return offGrid;
 	case v == 14 && u == 0:
 		return zxCorner;
