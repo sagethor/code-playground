@@ -9,7 +9,6 @@ func vuConvert(v uint8, u uint8) uint8 {
 	return v * 15 + u; // w
 }
 
-// re-evaluate for xy, yz, zx... do we just include those? in need of large rewrite...
 type boundType uint8;
 const (
 	onGrid boundType = iota
@@ -20,6 +19,12 @@ const (
 	xminusEdge
 	yminusEdge
 	zminusEdge
+	xzCorner
+	xyCorner
+	yzCorner
+	yxCorner
+	zyCorner
+	zxCorner
 )
 func wBounds(w uint8) boundType {
 	return vuBounds(wConvert(w));
@@ -28,68 +33,141 @@ func vuBounds(v uint8, u uint8) boundType {
 	switch {
 	case v+u < 6, v+u > 22:
 		return offGrid;
-	case v == 0 && u != 14 && u != 0:
+	case v == 14 && u == 0:
+		return zxCorner;
+	case v == 14 && u == 7:
+		return yxCorner;
+	case v == 7 && u == 14:
+		return yzCorner;
+	case v == 0 && u == 14:
+		return xzCorner;
+	case v == 0 && u == 7:
+		return xyCorner;
+	case v == 7 && u == 0:
+		return zyCorner;
+	case v == 0:
 		return xplusEdge;
-	case v == 14 && u != 14 && u != 0:
+	case v == 14:
 		return xminusEdge;
-	case v+u == 21 && v != 14 && v != 7:
+	case v+u == 21:
 		return yplusEdge;
-	case v+u == 7 && v!= 7 && v != 0:
+	case v+u == 7:
 		return yminusEdge;
-	case v != 7 && v != 14 && u == 0:
+	case u == 0:
 		return zplusEdge;
-	case v!= 7 && v != 14 && u == 14:
+	case u == 14:
 		return zminusEdge;
 	default:
 		return onGrid;
 	}
 }
 
-// rewrite for boundType usage
-func vWalk(fwd bool, w uint8) uint8 {
+// rewrite for simplicity (none of this boolean shit)
+func vplusWalk(w uint8) uint8 {
 	switch wBounds(w) {
+	case xminusEdge, zxCorner:
+		// advance one zone in the -x direction, calculate new coordinate - custom w code?
+
+	case yplusEdge, yzCorner:
+		// advance one zone in the +y direction, calculate new coordinate - custom w code?
+
+	case yxCorner:
+		// interesting "corner" case, need to come to design decision.
+
 	case offGrid:
-		// TO-DO: define behavior for locations off-grid.
-	case xplusEdge:
-		if fwd {
-			return w + 15;
-		} else {
-			// TO-DO: define moving one zone over in the x-direction
-		}
-	case xminusEdge:
-		if fwd {
-			// TO-DO: return
-	case default:
-		if fwd {
-			return w + 15;
-		} else {
-			return w - 15;
-		}
+		// do nothing - player will need to file bug report?
+		return w;
+	default:
+		return w + 15;
 	}
 }
-func uWalk(fwd bool, w uint8) uint8 {
-	var prime = w;
-	if fwd {
-		prime++;
-	} else {
-		prime--;
-	}
-	if wBounds(prime) {
-		return prime;
-	} else {
+func vminusWalk(w uint8) uint8 {
+	switch wBounds(w) {
+	case xplusEdge, xzCorner:
+		// advance one zone in the +x direction, calculate new coordinate - custom w code?
+
+	case yminusEdge, zyCorner:
+		// advance one zone in the -y direction, calculate new coordinate - custom w code?
+
+	case xyCorner:
+		// interesting "corner" case, need to come to design decision.
+
+	case offGrid:
+		// do nothing - player will need to file bug report?
 		return w;
+	default:
+		return w - 15;
 	}
 }
-func vuWalk(fwd bool, w uint8) uint8 {
-	var prime = w;
-	if fwd {
-		prime += 14;
-	} else {
-		prime -= 14;
-	}
-	if wBounds(prime) {
-		return prime;
-	} else {
+func uplusWalk(w uint8) uint8 {
+	switch wBounds(w) {
+	case yplusEdge, yxCorner:
+		// advance one zone in the +y direction, calculate new coordinate - custom w code?
+
+	case zminusEdge, xzCorner:
+		// advance one zone in the -z direction, calculate new coordinate - custom w code?
+
+	case yzCorner:
+		// interesting "corner" case, need to come to design decision.
+
+	case offGrid:
+		// do nothing - player will need to file bug report?
 		return w;
+	default:
+		return u + 1;
+	}
+}
+func uminusWalk(w uint8) uint8 {
+	switch wBounds(w) {
+	case yminusEdge, xyCorner:
+		// advance one zone in the -y direction, calculate new coordinate - custom w code?
+
+	case zplusEdge, zxCorner:
+		// advance one zone in the +z direction, calculate new coordinate - custom w code?
+
+	case zyCorner:
+		// interesting "corner" case, need to come to design decision.
+
+	case offGrid:
+		// do nothing - player will need to file bug report?
+		return w;
+	default:
+		return w + 1;
+	}
+}
+func vuplusWalk(w uint8) uint8 {
+	swtich wBounds(w) {
+	case zplusEdge, zyCorner:
+		// advance one zone in the +z direction, calculate new coordinate - custom w code?
+
+	case xminusEdge, yxCorner:
+		// advance one zone in the -x direction, calculate new coordinate - custom w code?
+
+	case zxCorner:
+		// interesting "corner" case, need to come to design decision.
+
+	case offGrid:
+		// do nothing - player will need to file bug report?
+		return w;
+	default:
+		return w + 14;
+	}
+}
+func vuminusWalk(w uint8) uint8 {
+	switch wBounds(w) {
+	case zminusEdge, yzCorner:
+		// advance one zone in the -z direction, calculate new coordinate - custom w code?
+
+	case xplusEdge, xyCorner:
+		// advance one zone in the +x direction, calculate new coordinate - custom w code?
+
+	case xzCorner:
+		// interesting "corner" case, need to come to design decision.
+
+	case offGrid:
+		// do nothing - player will need to file bug report?
+		return w;
+	default:
+		return w - 14;
 	}
 }
