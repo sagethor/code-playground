@@ -5,6 +5,7 @@ import (
 	"encoding/gob"
 	"log"
 	"os"
+	"./lrng8"
 )
 
 type testType struct {
@@ -45,6 +46,6 @@ func main() {
 	fmt.Printf("%q: {%d, %d, %d, %d}\n", test.Name, test.W, test.X, test.Y, test.Z);
 
 	// testing lrng8()
-	lrng8();
-	fmt.Println(lrng8());
+	lrng8.Rand();
+	fmt.Println(lrng8.Rand());
 }

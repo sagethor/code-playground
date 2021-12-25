@@ -62,7 +62,7 @@ func vuBounds(v uint8, u uint8) boundType {
 	}
 }
 
-// zone changes (x,y,z) have special return values [+] (0, 1, 2) & [-] (255, 254, 253)
+// zone changes (x,y,z) have special return values [+] (0, 1, 2) & [-] (255, 254, 253):w
 func vplusWalk(w uint8) uint8 {
 	switch wBounds(w) {
 	case xminusEdge, zxCorner, yxCorner:
@@ -72,7 +72,6 @@ func vplusWalk(w uint8) uint8 {
 		// advance one zone in the +y direction.
 		return 1;
 	case offGrid:
-		// do nothing - player will need to file bug report?
 		return w;
 	default:
 		return w + 15;
@@ -87,7 +86,6 @@ func vminusWalk(w uint8) uint8 {
 		// advance one zone in the -y direction.
 		return 254;
 	case offGrid:
-		// do nothing - player will need to file bug report?
 		return w;
 	default:
 		return w - 15;
@@ -102,7 +100,6 @@ func uplusWalk(w uint8) uint8 {
 		// advance one zone in the -z direction.
 		return 253;
 	case offGrid:
-		// do nothing - player will need to file bug report?
 		return w;
 	default:
 		return u + 1;
@@ -117,7 +114,6 @@ func uminusWalk(w uint8) uint8 {
 		// advance one zone in the +z direction.
 		return 2;
 	case offGrid:
-		// do nothing - player will need to file bug report?
 		return w;
 	default:
 		return w + 1;
@@ -132,7 +128,6 @@ func vuplusWalk(w uint8) uint8 {
 		// advance one zone in the -x direction.
 		return 255;
 	case offGrid:
-		// do nothing - player will need to file bug report?
 		return w;
 	default:
 		return w + 14;
@@ -147,7 +142,6 @@ func vuminusWalk(w uint8) uint8 {
 		// advance one zone in the +x direction.
 		return 0;
 	case offGrid:
-		// do nothing - player will need to file bug report?
 		return w;
 	default:
 		return w - 14;
