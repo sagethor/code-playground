@@ -25,8 +25,8 @@ func Compress(s []byte) []byte {
 	zip := gzip.NewWriter(&buf);
 	zip.Write(s);
 	zip.Close();
-	fmt.Println("compressed size (bytes): ", len(zip.Bytes()));
-	return zip.Bytes();
+	fmt.Println("compressed size (bytes): ", len(buf.Bytes()));
+	return buf.Bytes();
 }
 func Decompress(s []byte) []byte {
 	rdr, _ := gzip.NewReader(bytes.NewReader(s));
@@ -75,7 +75,7 @@ toWrite := EncodeToBytes(t);
 toWrite = Compress(toWrite);
 WriteFile(toWrite, "test.dat");
 
-toRead := ReadFromFile("test.dat");
+toRead := ReadFile("test.dat");
 toRead = Decompress(toRead);
 test := DecodeToStructTest(toRead);
 

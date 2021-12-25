@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"encoding/gob"
 	"log"
-	"os"
+	"bytes"
 	"./lrng8"
+	"./cereal"
 )
 
 type Test struct {
@@ -15,6 +16,15 @@ type Test struct {
 }
 
 // define decodeToTest function below
+func decodeToTest(s []byte) Test {
+	t := Test{};
+	dec := gob.NewDecoder(bytes.NewReader(s));
+	err := dec.Decode(&t);
+	if err != nil {
+		log.Fatal(err);
+	}
+	return t;
+}
 
 func main() {
 	// initialization
@@ -31,4 +41,13 @@ func main() {
 
 	// finish creating cereal module and use function to test
 
+	testWrite := cereal.EncodeToBytes(test);
+	testWrite = cereal.Compress(testWrite);
+	cereal.WriteFile(testWrite, "test.dat");
+
+	testRead := cereal.ReadFile("test.dat");
+	testRead = cereal.Decompress(testRead);
+	tested := decodeToTest(testRead);
+
+	fmt.Printf("%q: {%d, %d, %d, %d}\n", tested.Name, tested.W, tested.X, tested.Y, tested.Z);
 }
