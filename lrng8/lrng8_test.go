@@ -11,9 +11,13 @@ func TestLrng8_32(t *testing.T) {
 		avg += float64(buffer[i]);
 	}
 	avg = avg / 256;
-	// less than .01% probability of average less than 110, assuming normal distribution. 
+	// less than .007% probability of average less than 110, assuming normal distribution. 
 	if avg < 110 {
-		t.Errorf("lrng8_32() average is only %f", avg);
+		t.Errorf("lrng8_32() average is improbably low: %f", avg);
+	}
+	// less than .007% probability of average more than 145, assuming normal distribution.
+	if avg > 145 {
+		t.Errorf("lrng8_32() average is improbably high: %f", avg);
 	}
 }
 
@@ -24,8 +28,12 @@ func TestLrng8_64(t *testing.T) {
 		avg += float64(buffer[i]);
 	}
 	avg = avg / 256;
-	// less than .01% probability of average less than 110, assuming normal distribution. 
+	// less than .007% probability of average less than 110, assuming normal distribution. 
 	if avg < 110 {
-		t.Errorf("lrng8_64() average is only %f", avg);
+		t.Errorf("lrng8_64() average is improbably low: %f", avg);
+	}
+	// less than .007 probability of average more than 145, assuming normal distribution.
+	if avg > 145 {
+		t.Errorf("lrng8_64() average is improbably high: %f", avg);
 	}
 }
