@@ -27,8 +27,8 @@ func decodeToTest(s []byte) Test {
 }
 
 func main() {
-	// initialization
-	lrng8.Rand();
+	// see if init() in module works
+	fmt.Println(lrng8.Rand());
 
 	// testing
 	var test Test;

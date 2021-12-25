@@ -3,9 +3,14 @@ package lrng8
 import "time"
 import "encoding/binary"
 import "math/bits"
-// hacky - run lrng8() once to fill buffer on init
+// consider getting rid of these private globals?
 var counter uint8 = 255;
 var buffer [256]uint8;
+
+// initial filling of buffer
+func init() {
+	Rand();
+}
 
 func nanow() int64 {
 	return time.Now().UnixNano();
