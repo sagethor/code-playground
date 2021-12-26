@@ -1,6 +1,4 @@
-package main
-
-// may need to adjust all below for modifying struct field
+package world
 
 func wConvert(w uint8) (uint8, uint8) {
 	return (w / 15, w % 15); // (v, u)

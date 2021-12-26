@@ -27,10 +27,8 @@ func decodeToTest(s []byte) Test {
 }
 
 func main() {
-	// see if init() in module works
 	fmt.Println(lrng8.Rand());
 
-	// testing
 	var test Test;
 	test.Name = "test";
 	test.W = 1;
@@ -38,8 +36,6 @@ func main() {
 	test.Y = 3;
 	test.Z = 4;
 	fmt.Printf("%q: {%d, %d, %d, %d}\n", test.Name, test.W, test.X, test.Y, test.Z);
-
-	// finish creating cereal module and use function to test
 
 	testWrite := cereal.EncodeToBytes(test);
 	testWrite = cereal.Compress(testWrite);
