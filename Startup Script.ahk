@@ -181,6 +181,8 @@ return
 
 ; Move Discord and NOX into place
 NumpadDel:: ; decimal
+WinGetActiveTitle, Title
+WinMove, %Title%,, 1913, 0, 1192, 1057
 SetTitleMatchMode, 3
 if (WinActive("ahk_class Shell_TrayWnd"))
 {
@@ -200,6 +202,7 @@ Mon2XHalf := Floor(Mon2Right / 2)
 Mon2YHalf := Floor(Mon2Bottom / 2)
 WinMove, NoxPlayer, , %Mon2XHalf%, %Mon2YHalf%, %Mon2XHalf%, %Mon2YHalf%
 WinClose, ahk_class Qt5QWindowToolSaveBits
+WinMove, ahk_class CabinetWClass, , 0, %Mon2YHalf%, %Mon2XHalf%,%Mon2YHalf%
 SetTitleMatchMode, 2
 WinMove, Discord, , 0, 0, %Mon2XHalf%, %Mon2YHalf%
 WinMove, Picture in picture, , %Mon2XHalf%, 0, %Mon2XHalf%, %Mon2YHalf%
