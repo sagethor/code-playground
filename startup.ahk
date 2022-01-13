@@ -9,9 +9,9 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 ; ---------------------------------
 ; AUTOCOMPLETES
 ; ---------------------------------
-::-y::{bs 1}https://www.youtube.com/feed/subscriptions{enter}
-::-g::{bs 1}https://mail.google.com/mail/u/0/{enter}
-::-t::{bs 1}https://twitter.com/home{enter}
+::yout::{bs 1}https://www.youtube.com/feed/subscriptions{enter}
+::mail::{bs 1}https://mail.google.com/mail/u/0/{enter}
+::twit::{bs 1}https://twitter.com/home{enter}
 
 ; ---------------------------------
 ; Easy Window Dragging (requires XP/2k/NT)
@@ -106,7 +106,7 @@ return
 ; Script Edit / Save
 NumpadIns::
 SetTitleMatchMode, 2
-if not WinExist("Startup Script")
+if not WinExist("startup.ahk")
 {
 	Edit
 }

@@ -1,8 +1,10 @@
 package lrng8
 
-import "time"
-import "encoding/binary"
-import "math/bits"
+import (
+	"time"
+	"encoding/binary"
+	"math/bits"
+)
 // consider getting rid of these private globals?
 var counter uint8 = 255;
 var buffer [256]uint8;
