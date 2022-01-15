@@ -1,11 +1,16 @@
 const canvas = document.getElementById('hexgrid');
 const ctx = canvas.getContext('2d');
 
-// make radius programmatic
-const r = 25;
+// Make this realtime adaptive (need to add in rerender function?)
+var winwidth = window.innerWidth;
+var winheight = window.innerHeight;
+ctx.canvas.width = winwidth-20;
+ctx.canvas.height = winheight-20;
+var r = Math.min((winwidth-30)/15/Math.sqrt(3), (winheight-30)/11.5/2);
 
-const hexwidth = Math.sqrt(3) * r;
-const hexheight = 2 * r;
+// CENTER TO CORNER
+var hexwidth = Math.sqrt(3) * r;
+var hexheight = 2 * r;
 
 const x_offset = -5;
 const y_offset = 1;
@@ -28,6 +33,13 @@ class hexoffset { // OFFSET
 		this.row = row;
 	}
 }
+class hexcube { // CUBE
+	constructor(v, u, t) {
+		this.v = v; // same as axial
+		this.u = u; // same as axial
+		this.t = t; // should be -v-u
+	}
+}
 
 function hexcorner(center, size, i) {
 	var angle_deg = 60 * i - 30;
@@ -45,22 +57,33 @@ function hexdraw(center, size) {
 	ctx.closePath();
 	ctx.stroke();
 }
-// not 100% sure if this is neccessary.
+// CONVERSIONS (axial <-> offset / cube)
+function cube_to_axial(cube) {
+	var v = cube.v;
+	var u = cube.u;
+	return new hexcoord(v, u);
+}
+function axial_to_cube(hex) {
+	var v = hex.v;
+	var u = hex.u;
+	var t = -hex.v-hex.u;
+	return new hexcube(v, u, t);
+}
 function axial_to_offset(hex) {
 	var col = hex.u + (hex.v + (hex.v&1)) / 2;
 	var row = hex.v;
 	return new hexoffset(col, row);
 }
 function offset_to_axial(hex) {
-	var u = hex.col - (hex.row + hex.row&1)) / 2;
+	var u = hex.col - (hex.row + (hex.row&1)) / 2;
 	var v = hex.row;
 	return new hexcoord(v, u);
 }
 
-// again, not 100% sure on all of this, but I guess this boilerplate can't hurt
+// DIRECTIONS
 var axial_unit_vectors = [
-	hexcoord(1, 0), hexcoord(1, -1), hexcoord(0, -1),
-	hexcoord(-1, 0), hexcoord(-1, 1), hexcoord(0, 1)
+	new hexcoord(1, 0), new hexcoord(1, -1), new hexcoord(0, -1),
+	new hexcoord(-1, 0), new hexcoord(-1, 1), new hexcoord(0, 1)
 ];
 function axial_direction(direction) {
 	return axial_direction_vectors[direction];
@@ -72,7 +95,45 @@ function axial_neighbor(hex, direction) {
 	return axial_add(hex, axial_direction(direction));
 }
 
-// stopping here - https://www.redblobgames.com/grids/hexagons/#neighbors-offset
+// DISTANCES
+function cube_subtract(a, b) {
+	return new hexcube(a.v - b.v, a.u - b.u, a.t - b.t);
+}
+function cube_distance(a, b) {
+	var vec = cube_subtract(a, b);
+	return (Math.abs(vec.q) + abs(vec.r) + abs(vec.s)) / 2;
+}
+// formula for Euclidean distance: sqrt(dq^2 + dr^2 + dq*dr)
+function axial_distance(a, b) {
+	var ac = axial_to_cube(a);
+	var bc = axial_to_cube(b);
+	return cube_distance(ac, bc);
+}
+
+// LINE DRAWING
+
+// MOVEMENT RANGE
+
+// ROTATION
+
+// REFLECTION
+
+// RINGS
+
+// FIELD OF VIEW
+
+// HEX TO PIXEL
+
+// PIXEL TO HEX
+
+// ROUNDING TO NEAREST HEX
+
+// MAP STORAGE
+
+// WRAPAROUND MAPS
+
+// PATHFINDING
+
 
 
 function init() {
