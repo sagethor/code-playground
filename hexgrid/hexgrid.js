@@ -110,11 +110,59 @@ function axial_distance(a, b) {
 	return cube_distance(ac, bc);
 }
 
+// WIP SECTIONS BELOW, ABOVE TO BE REVISED AT A LATER DATE
+
 // LINE DRAWING
+function lerp(a, b, t) {
+
+}
+function cube_lerp(a, b, t) {
+
+}
+function cube_linedraw(a, b) {
+
+}
 
 // MOVEMENT RANGE
+// [COORDINATE RANGES]
+// var results = [];
+// for each -N <= q <= N {
+// 	var s = -q-r;
+// 	results.append(cube_add(center, Cube(q, r, s)));
+//
+// for each -N <= q <= N {
+// 	for each max(-N, -q-N) <= r <= min(N, -q+N) {
+//		results.append(axial_add(center, Hex(q, r)))
+//	}
+// }
+//
+// [INTERSECTING RANGES]
+// for each q_min <= q <= q_max {
+// 	for each max(r_min, -q-s_max) <= r <= min(r_max, -q-s_min) {
+//		results.append(Hex(q, r));
+// 	}
+// }
+//
+// [OBSTACLES]
+// function hex_reachable(start, movement) {
+// 	var visited = set(); // set of hexes
+// 	add start to visited
+// 	var fringes = []; // array of arrays of hexes?
+// 	fringes.append([start]);
+// 	for each 1 < k <= movement {
+// 		fringes,.append([]);
+// 		for each hex in fringes[k-1] {
+// 			var neighbor = hex_neighbor(hex, dir);
+// 			if neighbor not in visited and not blocked {
+// 				add neighbor to visited
+// 				fringes[k].append(neighbor);
+// 			}
+// 		}
+// 	return visited;
+// }
 
 // ROTATION
+//
 
 // REFLECTION
 
