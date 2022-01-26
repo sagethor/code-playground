@@ -1,147 +1,81 @@
 package world
 
-func wConvert(w uint8) (uint8, uint8) {
-	return (w / 15, w % 15); // (v, u)
+// rewritten using "hexgrid positions & movement tables.pdf"
+func vuCoordinates(w uint8) (uint8, uint8) {
+	return (w >> 4, w & 0x0f); // (v, u)
 }
-func vuConvert(v uint8, u uint8) uint8 {
-	return v * 15 + u; // w
+func vuCoordinate(v, u uint8) uint8 {
+	return (v << 4) + u; // w 
 }
 
 type boundType uint8;
 const (
-	onGrid boundType = iota
+	onGrid boundType = 1 << iota;
 	offGrid
-	xplusEdge
-	yplusEdge
-	zplusEdge
-	xminusEdge
-	yminusEdge
-	zminusEdge
-	xzCorner
-	xyCorner
-	yzCorner
-	yxCorner
-	zyCorner
-	zxCorner
+	xPlus
+	yPlus
+	zPlus
+	xMinus
+	yMinus
+	zMinus
 )
+
 func wBounds(w uint8) boundType {
-	return vuBounds(wConvert(w));
-}
-func vuBounds(v uint8, u uint8) boundType {
-	switch {
-	case v+u < 6, v+u > 22, v > 14, u > 14:
+	switch w {
+	case 0, 1, 2, 3, 4, 5, 6,
+	16, 17, 18, 19, 20, 21, 31
+	32, 33, 36, 35, 36, 47,
+	48, 49, 50, 51, 63,
+	64, 65, 66, 79,
+	80, 81, 95,
+	96, 111,
+	127,
+	142, 143,
+	157, 158, 159,
+	172, 173, 174, 175,
+	187, 188, 189, 190, 191,
+	202, 203, 204, 205, 206, 207,
+	217, 218, 219, 220, 221, 222, 223,
+	232, 233, 234, 235, 236, 237, 238, 239,
+	240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 253, 254, 255:
 		return offGrid;
-	case v == 14 && u == 0:
-		return zxCorner;
-	case v == 14 && u == 7:
-		return yxCorner;
-	case v == 7 && u == 14:
-		return yzCorner;
-	case v == 0 && u == 14:
-		return xzCorner;
-	case v == 0 && u == 7:
-		return xyCorner;
-	case v == 7 && u == 0:
-		return zyCorner;
-	case v == 0:
-		return xplusEdge;
-	case v == 14:
-		return xminusEdge;
-	case v+u == 21:
-		return yplusEdge;
-	case v+u == 7:
-		return yminusEdge;
-	case u == 0:
-		return zplusEdge;
-	case u == 14:
-		return zminusEdge;
-	default:
+	case 7, 8, 9, 10, 11, 12, 13:
+		return xPlus;
+	case 225, 226, 227, 228, 229, 230, 231:
+		return xMinus;
+	case 126, 141, 156, 171, 186, 201, 216:
+		return yPlus;
+	case 22, 37, 52, 67, 82, 97, 112:
+		return yMinus;
+	case 128, 144, 160, 176, 192, 208, 224:
+		return zPlus;
+	case 14, 30, 46, 62, 78, 94, 110:
+		return zMinus;
+	case default:
 		return onGrid;
 	}
 }
+func vuBounds(v, u uint8) boundType {
+	return wBounds(vuCoordinate(v, u));
+}
 
-// zone changes (x,y,z) have special return values [+] (0, 1, 2) & [-] (255, 254, 253):w
-func vplusWalk(w uint8) uint8 {
-	switch wBounds(w) {
-	case xminusEdge, zxCorner, yxCorner:
-		// advance one zone in the -x direction.
-		return 255;
-	case yplusEdge, yzCorner:
-		// advance one zone in the +y direction.
-		return 1;
-	case offGrid:
-		return w;
+// refactor/rename when process flow is decided upon
+// ALSO TEST THIS IN EXCEL?
+func zoneChange(w uint8) uint8 {
+	eval := wBounds(w);
+	switch eval {
+	case xPlus:
+		return w + 202;
+	case xMinus:
+		return w - 202;
+	case yPlus:
+		return w - 103;
+	case yMinus:
+		return w + 103;
+	case zPlus:
+		return w - 115;
+	case zMinus:
+		return w + 115;
 	default:
-		return w + 15;
-	}
-}
-func vminusWalk(w uint8) uint8 {
-	switch wBounds(w) {
-	case xplusEdge, xzCorner, xyCorner:
-		// advance one zone in the +x direction.
-		return 0;
-	case yminusEdge, zyCorner:
-		// advance one zone in the -y direction.
-		return 254;
-	case offGrid:
 		return w;
-	default:
-		return w - 15;
-	}
-}
-func uplusWalk(w uint8) uint8 {
-	switch wBounds(w) {
-	case yplusEdge, yxCorner, yzCorner:
-		// advance one zone in the +y direction.
-		return 1;
-	case zminusEdge, xzCorner:
-		// advance one zone in the -z direction.
-		return 253;
-	case offGrid:
-		return w;
-	default:
-		return u + 1;
-	}
-}
-func uminusWalk(w uint8) uint8 {
-	switch wBounds(w) {
-	case yminusEdge, xyCorner, zyCorner:
-		// advance one zone in the -y direction.
-		return 254;
-	case zplusEdge, zxCorner:
-		// advance one zone in the +z direction.
-		return 2;
-	case offGrid:
-		return w;
-	default:
-		return w + 1;
-	}
-}
-func vuplusWalk(w uint8) uint8 {
-	swtich wBounds(w) {
-	case zplusEdge, zyCorner, zxCorner:
-		// advance one zone in the +z direction.
-		return 2;
-	case xminusEdge, yxCorner:
-		// advance one zone in the -x direction.
-		return 255;
-	case offGrid:
-		return w;
-	default:
-		return w + 14;
-	}
-}
-func vuminusWalk(w uint8) uint8 {
-	switch wBounds(w) {
-	case zminusEdge, yzCorner, xzCorner:
-		// advance one zone in the -z direction.
-		return 253;
-	case xplusEdge, xyCorner:
-		// advance one zone in the +x direction.
-		return 0;
-	case offGrid:
-		return w;
-	default:
-		return w - 14;
-	}
 }

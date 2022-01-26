@@ -21,7 +21,7 @@ class hexpoint {
 		this.y = y; // screen y
 	}
 }
-class hexcoord { // AXIAL
+class hexcoord { // AXIAL - PRIMARY COORDINATE SYSTEM
 	constructor(v, u) {
 		this.v = v; // rows
 		this.u = u; // columns
