@@ -1,12 +1,8 @@
-package main
+package mask
 
 import (
 	"fmt"
 )
-
-func main() {
-	fmt.Println(mask(3, 255));
-}
 
 // assume A := {0, 1, 2, 3}
 func mask(a, b uint8) uint8 {

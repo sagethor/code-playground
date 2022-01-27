@@ -1,11 +1,32 @@
 package world
 
 // rewritten using "hexgrid positions & movement tables.pdf"
+// not sure if v & u are strictly needed anymore, but the functions are still available.
 func vuCoordinates(w uint8) (uint8, uint8) {
 	return (w >> 4, w & 0x0f); // (v, u)
 }
 func vuCoordinate(v, u uint8) uint8 {
 	return (v << 4) + u; // w 
+}
+
+// this will likely need rewrite with other sections once integrated with client
+func vStepPlus(w uint8) uint8 {
+	return w + 16;
+}
+func vStepMinus(w uint8) uint8 {
+	return w - 16;
+}
+func uStepPlus(w uint8) uint8 {
+	return w + 1;
+}
+func uStepMinus(w uint8) uint8 {
+	return w - 1;
+}
+func vuStepPlus(w uint8) uint8 {
+	return w + 15;
+}
+func vuStepMinus(w uint8) uint8 {
+	return w - 15;
 }
 
 type boundType uint8;
