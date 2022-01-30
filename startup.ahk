@@ -101,6 +101,15 @@ MouseGetPos MouseX, MouseY
 return
 
 ; ---------------------------------
+; SCRLOCK OFF
+; ---------------------------------
+#If GetKeyState("ScrollLock","T")
+1::
+Winset, Alwaysontop, , A
+return
+#If
+
+; ---------------------------------
 ; NUMLOCK OFF
 ; ---------------------------------
 ; Script Edit / Save
