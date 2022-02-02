@@ -12,7 +12,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 ::yout::{bs 1}https://www.youtube.com/feed/subscriptions{enter}
 ::mail::{bs 1}https://mail.google.com/mail/u/0/{enter}
 ::twit::{bs 1}https://twitter.com/home{enter}
-
+::nox::Run, nox
 ; ---------------------------------
 ; Easy Window Dragging (requires XP/2k/NT)
 ; ---------------------------------

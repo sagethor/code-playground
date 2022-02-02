@@ -20,31 +20,65 @@ func hillmask(a, b uint8) uint8 {
 	}
 }
 
+// col_odd = random & 0x0003ffff
+// col_even = random & 0x0000ffff
+
 // puzzle pirates distilling game example
 // array should have 10, one per each column
 // consider using the final value for gamestate / score
-func swapmask(arr []uint64) {
+func swapmask(board []uint32) []uint32 {
+	swaps [9]uint32;
+	c0, c1, h0, h1, l0, l1 uint32;
 	for i = 0; i < 9; i++ {
-		h, l uint64;
-		if (i & 1) == 1 {
-			h = arr[i+1];
-			l = arr[i];
-		} else {
-			h = arr[i];
-			l = arr[i+1];
+		// even leading column
+		if (i & 1) == 0 {
+			h0 = board[i] & 0x5555;
+			h1 = (board[i] & 0xAAAA) >> 1;
+			l0 = board[i+1] & 0x5555;
+			l1 = (board[i+1] & 0xAAAA) >> 1;
+			c0 = (^h1) & (^h0) & l1 & (^l0);
+			h0 = l0; h1 = l1;
+			l0 = r0 >> 2 & 0x5555;
+			l1 = (r0 >> 2 & 0xAAAA) >> 1;
+			c1 = (^h1) & (^h0) & l1 & (^l0);
+			swaps[i] = c0 | c1 << 1;
+			// odd leading column
+		}	else {
+			// h0 = board[i] & 0x5555;
+			// h1 = (board[i] & 0xAAAA) >> 1
+			l0 = board[i+1] >> 2 & 0x5555;
+			l1 = (board[i+1] >> 2 & 0xAAAA) >> 1;
+			c1 = (^h1) & (^h0) & l1 & (^l0);
+			l0 = h0; l1 = h1;
+			h0 = board[i+1] & 0x5555;
+			h1 = (board[i+1] & 0xAAAA) >> 1;
+			c0 = (^h1) & (^h0) & l1 & (^l0);
+			swaps[i] = c0 | c1 << 1;
 		}
-		// split up state vars for readability
-		h0 := h & 0x5555;
-		h1 := h & 0xb0b0;
-		l0 := l & 0x5555;
-		l1 := l & 0xb0b0;
+	}
+	return swaps;
+}
 
-		c := (^h1) & (^h0) & l1 & (^l0) |
-		(^h1) & h0 & (^l1) & (^l0) |
-		h1 & (^h0) & (^l1) & l0;
-
-		// okay this is probably being a little too cute here
-		// we store the swapmask in the upper 32, raw data only uses lower 32
-		arr[i] = arr[i] & 0xffff | c;
+// condensed version (test against above)
+// for this and the above we can look at returning []uint16 instead
+func condmask(board []uint32) []uint32 {
+	swaps [9] uint32;
+	c0, h0, h1, l0, l1 uint32;
+	for i = 0; i < 9; i++ {
+		// even leading column
+		if (i & 1) == 0 {
+			h0 = board[i] & 0x5555 & (board[i+1] & 0xAAAA) << 1;
+			h1 = (board[i] & 0xAAAA) >> 1 & board[i+1] & 0xAAAA;
+			l0 = board[i+1] & 0x5555 & (board[i] >> 2 & 0x5555) << 1;
+			l1 = (board[i+1] & 0xAAAA) >> 1 & board[i] >> 2 & 0xAAAA;
+			swaps[i] = (^h1) & (^h0) & l1 & (^l0);
+		// odd leading column
+		} else {
+			h0 = board[i+1] & 0x5555 & (board[i] & 0x5555) << 1;
+			h1 = (board[i+1] & 0xAAAA) >> 1 & board[i] & 0xAAAA;
+			l0 = board[i] & 0x5555 & (board[i+1] >> 2 & 0x5555) << 1;
+			l1 = (board[i] & 0xAAAA) >> 1 & board[i+1] >> 2 & 0xAAAA;
+			swaps[i] = (^h1) & (^h0) & l1 & (^l0);
+		}
 	}
 }
