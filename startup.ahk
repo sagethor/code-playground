@@ -60,25 +60,6 @@ EWD_MouseStartY := EWD_MouseY
 return
 
 ; ---------------------------------
-; Autoclicker (alt + z)
-; ---------------------------------
-
-#maxThreadsPerHotkey, 2
-setKeyDelay, 50, 50
-setMouseDelay, 50
-autoClick := 0
-
-!z::
-	autoClick := !autoClick
-	while (autoClick = 1)
-	{
-		click
-		sleep 50
-	}
-return
-
-
-; ---------------------------------
 ; Autorun (alt + w)
 ; ---------------------------------
 !w::

@@ -96,6 +96,9 @@ function axial_neighbor(hex, direction) {
 }
 
 // DISTANCES
+function cube_add(a, b) {
+	return new hexcube(a.v + b.v, a.u + b.u, a.t + b.t);
+}
 function cube_subtract(a, b) {
 	return new hexcube(a.v - b.v, a.u - b.u, a.t - b.t);
 }
@@ -161,12 +164,28 @@ function cube_linedraw(a, b) {
 // 	return visited;
 // }
 
-// ROTATION
-//
+// ROTATION - confirm direction of rotation
+function axial_rotate_clockwise(hex, center) {
+	var vec = cube_subtract(axial_to_cube(hex), axial_to_center(hex));
+	var rot = new hexcube(-vec.u, -vec.v, -vec.t);
+	rot = cube_add(rot, center);
+	return cube_to_axial(rot);
+}
 
-// REFLECTION
-
+// REFLECTION - make another if you want a line that's not at 0.
+function axial_reflectT(hex) {
+	return new hexcoord(hex.u, hex.v);
+}
+function axial_reflectU(hex) {
+	return new hexcoord(-hex.u-hex.v, hex.u);
+}
+function axial_reflectV(hex) {
+	return new hexcoord(hex.v, -hex.u-hex.v);
+}
+// To reflect over a line that's not at 0, pick a reference point on that line.
+// Subtract the reference point, perform the reflection, then add the reference point back.
 // RINGS
+//
 
 // FIELD OF VIEW
 
