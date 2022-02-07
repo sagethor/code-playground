@@ -82,3 +82,29 @@ func condmask(board []uint32) []uint32 {
 		}
 	}
 }
+
+// even more condensed... remove one half of the mask since binary and will drop out the rest
+// test this against the other two...
+func tinymask(board []uint32) []uint32 {
+	swaps [9] uint32;
+	c0, h0, h1, l0, l1 uint32;
+	for i = 0; i < 9; i++ {
+		// even leading column
+		if (i & 1) == 0 {
+			h0 = board[i] & 0x5555 & board[i+1] << 1;
+			h1 = board[i] >> 1 & board[i+1] & 0xAAAA;
+			l0 = board[i+1] & 0x5555 & board[i] >> 1;
+			l1 = board[i] >> 2 & 0xAAAA & board[i+1] >> 1;
+			// l1 = (board[i] >> 1 & 0xAAAA & board[i+1]) >> 1;
+			swaps[i] = (^h1) & (^h0) & l1 & (^l0);
+		// odd leading column
+		} else {
+			h0 = board[i+1] & 0x5555 & board[i] << 1;
+			h1 = board[i+1] >> 1 & board[i] & 0xAAAA;
+			l0 = board[i] & 0x5555 & board[i+1] >> 1;
+			l1 = board[i+1] >> 2 & 0xAAAA & board[i] >> 1;
+			// l1 = (board[i+1] >> 1 & 0xAAAA & board[i]) >> 1
+			swaps[i] = (^h1) & (^h0) & l1 & (^l0);
+		}
+	}
+}
